@@ -3,15 +3,15 @@ import struct
 import matplotlib.pyplot as plt
 import time
 
-import brian as br
+import brian2 as br
 
 import libcell as lb
 import saveClass as sc
 
 # this does not creates a new module, just executes the content of the file
 # as if it was written in the same file!
-execfile('sim_functs.py') 
-
+#execfile('sim_functs.py') 
+exec(open("hGLM/Neuron/sim_functs.py").read())
 
 #----------------------------------------------------------------------------
 # Data saving object; # Data storage lists
@@ -47,11 +47,11 @@ data.SAVE = True
 data.SHOWSYNS = True
 
 ### number of iterations for allDend; number of orientations for ori
-data.nIter = 2 # 10 for allDend; 16 for ori and 10 for mixedori
+data.nIter = 1 # 10 for allDend; 16 for ori and 10 for mixedori
 ### time parameters
 data.st_onset = 0.11 # in seconds - only for minis
 data.st_duration = 2.5 # doesn't matter
-data.TSTOP = 2 # 41 for allDend, 18 for orientations and 48 for mixedori, 0.3 for minis
+data.TSTOP = 48 # 41 for allDend, 18 for orientations and 48 for mixedori, 0.3 for minis
 
 data.ACTIVE = True
 data.ACTIVEaxonSoma = True
@@ -86,7 +86,8 @@ data.Igmax = 1
 data.Irev = -80
 data.locBias = 'none'
 
-execfile('init_params.py')
+#execfile('init_params.py')
+exec(open("hGLM/Neuron/init_params.py").read())
 
 #----------------------------------------------------------------------------
 # Simulation general parameters
@@ -122,7 +123,7 @@ if (data.ICLAMP):
 
 # Elocs: synapse locations - list, with elements [dendrite number, synapse location]
 data.Elocs = genAllLocs(10) # distance between synapses
-print 'number of excitatory synapses:', len(data.Elocs)
+print('number of excitatory synapses:', len(data.Elocs))
 
 # inhibitory synapses - some are on the soma, others on the dendrites
 #data.nIter = len(data.rateE) 
@@ -139,8 +140,8 @@ if data.GABA:
     Idendlocs = genAllLocs(100)
     data.Ilocs = Isomalocs + Idendlocs
  #   data.Ilocs = Isomalocs
-    print 'number of somatic synapses:', nsyn_soma
-    print 'number of inhibitory synapses:', len(data.Ilocs)
+    print('number of somatic synapses:', nsyn_soma)
+    print('number of inhibitory synapses:', len(data.Ilocs))
 
 
 #########################################################################
@@ -153,7 +154,7 @@ nsyn_tree = np.empty((0, 2))
 elocs = np.asarray(data.Elocs)
 for ibranch in np.arange(max(elocs[:,0])+1):
 	nsyn_branch = float(sum(elocs[:,0] == ibranch))
-	nclust_branch = np.ceil(nsyn_branch / maxClust)
+	nclust_branch = int(np.ceil(nsyn_branch / maxClust))
 	syn_branch = np.ones((nclust_branch, 2)) * maxClust
 	if ((nsyn_branch % maxClust) > 0) :
 		syn_branch[nclust_branch-1, 1] = nsyn_branch % maxClust
@@ -222,14 +223,14 @@ lb.add_GABAsyns(model, locs=data.Ilocs, gmax=data.Igmax, rev=data.Irev, NoSynDen
 # ----------------------------------------------------------------------------
 # Run simulation
 # ----------------------------------------------------------------------------
-print 'simulation type: ', data.simType
+print('simulation type: ', data.simType)
 if (data.ACTIVE == True):
     if (data.ACTIVEdend == True) :
-        print 'dendrites are active, all branches are stimulated'
-    else :
-        print 'the soma is active, all branches are stimulated'
-else :
-    print 'the neuron is passive, all branches are stimulated'
+        print('dendrites are active, all branches are stimulated')
+    else:
+        print('the soma is active, all branches are stimulated')
+else:
+    print('the neuron is passive, all branches are stimulated')
 if (data.stimType == "allDend") :
     SIM_balanceIteration(data.EIrates)
 elif (data.stimType == "orientations"):
@@ -244,7 +245,7 @@ elif (data.stimType == "minis"):
 # show the traces
 
 if data.SHOWTRACES:
-    print 'plotting traces ...'
+    print('plotting traces ...')
     import cell_traces as ct
     if (data.stimType == 'minis'):
         ct.plotTraces(data, data.TSTOP * 1000)
@@ -259,7 +260,7 @@ if (len(data.Ensyn) < 10 ):
    data.locBias = '0' + data.locBias
 
 if data.SAVE:
-    print 'saving data ...'
+    print('saving data ...')
     if (data.stimType == "allDend") :
        outdir = data.simType + '/' + data.actType
     else:
@@ -273,7 +274,7 @@ if data.SAVE:
 # show the synapses
 
 if data.SHOWSYNS:
-    print 'plotting the cell with the synapses ...'
+    print('plotting the cell with the synapses ...')
     import cell_draw as cd
     if (data.simType=='nsyn') :
         cd.plot_syns(data, model, False)

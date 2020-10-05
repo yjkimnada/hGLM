@@ -15,7 +15,7 @@ def save_syn(data, outdir='data', clust='0'):
 
 
     bfname = './'+outdir+'/Syn_'+filename+'.bin'
-    print bfname
+    print(bfname)
     # create a binary file
     binfile = file(bfname, 'wb')
     # and write out two integers with the row and column dimension
@@ -76,10 +76,11 @@ def save_sim(data, out_binary=False, out_vdend=False, out_pickle=False, outdir='
         #---------------------------------------------
         # WRITE the response in a binary file to read it with R
         mat = np.array(data.vdata)
-        bfname = './'+outdir+'/vdata_'+filename+'.bin'
-        print bfname
+        bfname = outdir+'/vdata_'+filename+'.bin'
+        bfname = os.path.join("/Users/yjkimnada/hGLM/Neuron/", bfname)
+        print(bfname)
         # create a binary file
-        binfile = file(bfname, 'wb')
+        binfile = open(bfname, 'wb')
         # and write out two integers with the row and column dimension
         header = struct.pack('2I', mat.shape[0], mat.shape[1])
         binfile.write(header)
@@ -98,7 +99,7 @@ def save_sim(data, out_binary=False, out_vdend=False, out_pickle=False, outdir='
             
             bfname = './'+outdir+'/vDdata_'+filename+'.bin'
             # create a binary file
-            binfile = file(bfname, 'wb')
+            binfile = open(bfname, 'wb')
             # and write out two integers with the row and column dimension
             header = struct.pack('2I', mat.shape[0], mat.shape[1])
             binfile.write(header)
@@ -122,7 +123,7 @@ def save_sim(data, out_binary=False, out_vdend=False, out_pickle=False, outdir='
 
             bfname = './'+outdir+'/synlocs_'+filename+'.bin'
             # create a binary file
-            binfile = file(bfname, 'wb')
+            binfile = open(bfname, 'wb')
             # and write out two integers with the row and column dimension
             header = struct.pack('2I', Locs.shape[0], Locs.shape[1])
             binfile.write(header)
@@ -138,7 +139,7 @@ def save_sim(data, out_binary=False, out_vdend=False, out_pickle=False, outdir='
             stim = data.stim
             bfname = './'+outdir+'/stim_'+filename+'.bin'
             # create a binary file
-            binfile = file(bfname, 'wb')
+            binfile = open(bfname, 'wb')
             # and write out two integers with the row and column dimension
             header = struct.pack('2I', stim.shape[0], stim.shape[1])
             binfile.write(header)

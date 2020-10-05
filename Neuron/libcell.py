@@ -12,7 +12,7 @@ from neuron import h
 from neuron import load_mechanisms
 from neuron import gui
 
-#load_mechanisms('/directory_where_mod_files_have_been_compiled')
+load_mechanisms('hGLM/Neuron/')
 h('objref nil')
 
 # ----------------------------------------------------------
@@ -23,7 +23,7 @@ class L23(object):
     # are scaled to 70% to approximate it to mouse values
 
     def __init__(self):
-        h('xopen("./L23.hoc")')
+        h('xopen("hGLM/Neuron/L23.hoc")')
         props(self)
         self._geom()
         self._topol()
@@ -107,7 +107,7 @@ def init_active(model, axon=False, soma=False, dend=True, dendNa=False,
         model.axon.insert('kv'); model.axon.gbar_kv = model.gkv_axon
         model.axon.ena = model.Ena
         model.axon.ek = model.Ek
-        print 'active conductances added in the axon'
+        print('active conductances added in the axon')
         
     if soma:
         model.soma.insert('na'); model.soma.gbar_na = model.gna_soma
@@ -120,7 +120,7 @@ def init_active(model, axon=False, soma=False, dend=True, dendNa=False,
         model.soma.ena = model.Ena
         model.soma.ek = model.Ek
         model.soma.eca = model.Eca
-        print 'somatic active conductances enabled'
+        print('somatic active conductances enabled')
         
     if dend:
         for d in model.dends:
@@ -134,7 +134,7 @@ def init_active(model, axon=False, soma=False, dend=True, dendNa=False,
             d.ena = model.Ena
             d.ek = model.Ek
             d.eca = model.Eca
-        print 'active dendrites enabled'
+        print('active dendrites enabled')
 
 def add_somaStim(model, p=0.5, onset=20, dur=1, amp=0):
     model.stim = h.IClamp(model.soma(p))
@@ -209,7 +209,7 @@ def add_AMPAsyns(model, locs=[[0, 0.5]], gmax=0.5, tau1=0.1, tau2=2, NoSynDends=
         NC = h.NetCon(h.nil, AMPA, 0, 0, gg) # NetCon(source, target, threshold, delay, weight)
         model.AMPAlist.append(AMPA)
         model.ncAMPAlist.append(NC)
-    print 'AMPA synapses added'
+    print('AMPA synapses added')
 
 def add_NMDAsyns(model, locs=[[0, 0.5]], gmax=0.5, tau1=3, tau2=40, NoSynDends=[]):
     model.NMDAlist = []
@@ -233,7 +233,7 @@ def add_NMDAsyns(model, locs=[[0, 0.5]], gmax=0.5, tau1=3, tau2=40, NoSynDends=[
         x = float(loc[1])
         model.NMDAlist.append(NMDA)
         model.ncNMDAlist.append(NC)   
-    print 'dExp NMDA synapses generated'
+    print('dExp NMDA synapses generated')
 
 def add_NMDAkin_syns(model, locs=[[0, 0.5]], gmax=0.5, tau1=3, tau2=40, NoSynDends=[]):
     model.NMDAlist = []
@@ -254,7 +254,7 @@ def add_NMDAkin_syns(model, locs=[[0, 0.5]], gmax=0.5, tau1=3, tau2=40, NoSynDen
         NC = h.NetCon(h.nil, NMDA, 0, 0, 1)
         model.NMDAlist.append(NMDA)
         model.ncNMDAlist.append(NC)   
-    print 'kinetic NMDA synapses generated'
+    print('kinetic NMDA synapses generated')
 
         
 def add_GABAsyns(model, locs=[[0, 0.5]], gmax=0.5, tau1=0.1, tau2=4,
@@ -279,14 +279,14 @@ def add_GABAsyns(model, locs=[[0, 0.5]], gmax=0.5, tau1=0.1, tau2=4,
         NC = h.NetCon(h.nil, GABA, 0, 0, gg)
         model.GABAlist.append(GABA)
         model.ncGABAlist.append(NC)
-    print 'inhibitory synapses generated'
+    print('inhibitory synapses generated')
         
 
 def addSpines(model):
     for sec in model.dends:
         sec.cm = model.CM*1.5
         sec.g_pas = 1.0/(model.RM/1.5)
-    print 'fake spines added'
+    print('fake spines added')
 
 def hotSpot(model):
     spot = np.ceil(7/2.)

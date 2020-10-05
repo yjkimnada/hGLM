@@ -89,11 +89,11 @@ if (data.simType == 'allDend'):
     #                         fgErate,        fgIrate,              bgErate,         bgIrate
     ### balanceRange = np.array([[20, 26, 30, 36],[30, 80, 120, 200], [5, 6, 7, 9], [20, 70, 80, 140]]) # this was the default!
     ## balanceRange = np.array([[16, 24, 32, 50],[60, 100, 200, 400], [4, 4, 4, 4], [15, 15, 15, 15]])
-    balanceRange = np.array([[5, 10, 20, 26, 40, 55],[7, 15, 30, 80, 100, 300], [1, 3, 5, 6, 8, 10], [5, 10, 20, 55, 80, 150]])
+    balanceRange = np.asarray([[5, 10, 20, 26, 40, 55],[7, 15, 30, 80, 100, 300], [1, 3, 5, 6, 8, 10], [5, 10, 20, 55, 80, 150]])
     if (data.stimType == 'orientations'):
-		balanceRange = np.array([[20, 26, 30, 36],[30, 80, 120, 140], [5, 6, 7, 9], [20, 70, 80, 100]])
+        balanceRange = np.asarray([[20, 26, 30, 36],[30, 80, 120, 140], [5, 6, 7, 9], [20, 70, 80, 100]])
     if (data.stimType == 'mixedori'):
-        balanceRange = np.array([[20, 26, 30, 36],[30, 80, 120, 140], [5, 6, 7, 9], [20, 70, 80, 100]])
+        balanceRange = np.asarray([[20, 26, 30, 36],[30, 80, 120, 140], [5, 6, 7, 9], [20, 70, 80, 100]])
     if (data.actType == 'Poisson'):
         if (data.ACTIVEdend == True):
             data.EIrates = balanceRange[:,2]

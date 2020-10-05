@@ -69,7 +69,8 @@ def genDendLocs(dends, nsyn, spread):
         isd = (spread[1]-spread[0])/(nsyn_dend)
         pos = np.arange(spread[0], spread[1], isd)[0:nsyn_dend] 
         if (len(pos) != nsyn_dend):
-            print 'error: synapse number mismatch, stop simulation! dend:', i_dend, 'created=', len(pos), '!=', nsyn_dend
+            print('error: synapse number mismatch, stop simulation! dend:',
+            i_dend, 'created=', len(pos), '!=', nsyn_dend)
             sys.exit(1)
         for p in pos:
             locs.append([dend, p])
@@ -89,7 +90,8 @@ def genDendSomaLocs(dends, nsyn, spread):
         isd = (spread[1]-spread[0])/(nsyn_dend)
         pos = np.arange(spread[0], spread[1], isd)[0:nsyn_dend] 
         if (len(pos) != nsyn_dend):
-            print 'error: synapse number mismatch, stop simulation! dend:', i_dend, 'created=', len(pos), '!=', nsyn_dend
+            print('error: synapse number mismatch, stop simulation! dend:',
+            i_dend, 'created=', len(pos), '!=', nsyn_dend)
             sys.exit(1)
         for p in pos:
             locs.append([dend, p])
@@ -157,7 +159,7 @@ def readDendLocs(data):
 
 def genPoissonPulse(nsyn, rate, duration, onset):
     times = np.array([])
-    print 'Poisson train for', nsyn, 'cells with', rate, 'Hz rate and', duration, 'ms duration'
+    print('Poisson train for', nsyn, 'cells with', rate, 'Hz rate and', duration,'ms duration')
     while times.shape[0]<2: # at least two spikes are required
         P =  br.OfflinePoissonGroup(nsyn, rate, duration * br.ms)
         times = np.array(P.spiketimes)    
@@ -230,14 +232,15 @@ def readOriTrain(duration, ir, rep, Ensyn, bgErate, fgErate, Insyn, bgIrate, fgI
     Insyn = sum(Insyn)
     duration = duration*1000
     
-    fname = './allDend/orientations/Espikes_d'+str(duration)+'_r'+str(ir+1)+'_rep'+str(rep+1)+'_Ne'+str(Ensyn)+'_e'+str(bgErate)+'_E'+str(fgErate)+'.dat'
+    fname = 'hGLM/Neuron/allDend/mixedori/Espikes_d'+str(duration)+'_r'+str(ir+1)+'_rep'+str(rep+1)+'_Ne'+str(Ensyn)+'_e'+str(bgErate)+'_E'+str(fgErate)+'.dat'
+    print(fname)
     Etimes = loadtxt(fname, comments="#", delimiter=" ", unpack=False)    
     n_sp = len(Etimes)
 
     
     if (Insyn > 0) :
         Itimes = np.array([])
-        fname = './allDend/orientations/Ispikes_d'+str(duration)+'_r'+str(ir+1)+'_rep'+str(rep+1)+'_Ni'+str(Insyn)+'_i'+str(bgIrate)+'_I'+str(fgIrate)+'.dat'
+        fname = 'hGLM/Neuron/allDend/mixedori/Ispikes_d'+str(duration)+'_r'+str(ir+1)+'_rep'+str(rep+1)+'_Ni'+str(Insyn)+'_i'+str(bgIrate)+'_I'+str(fgIrate)+'.dat'
         Itimes = loadtxt(fname, comments="#", delimiter=" ", unpack=False)    
         times = [Etimes, Itimes]
     else :
@@ -331,7 +334,7 @@ def sim_nsynPoiss(Ensyn, Erate, bRate=0, minN=5, maxN=20):
     # print Ensyn, Erate, data.TSTOP * 1000
     data.etimes = genPoissonPulse(Ensyn, Erate, data.TSTOP * 1000, 0)
     data.itimes = []
-    print 'background spikes:', data.etimes.shape[0]
+    print('background spikes:', data.etimes.shape[0])
 
     if (bRate>0): # bursts
         fetimes = genPoissonPulse(1, bRate, data.TSTOP * 1000, 0)
@@ -348,7 +351,7 @@ def sim_nsynPoiss(Ensyn, Erate, bRate=0, minN=5, maxN=20):
             # print tBurst, nInput
             # print burst.shape 
             # print(data.etimes)
-    print 'total spikes:', data.etimes.shape[0]
+    print('total spikes:', data.etimes.shape[0])
     data.etimes = addBground(burst, data.etimes)
 
     # Run
@@ -365,7 +368,7 @@ def sim_oneRandomInput(Ensyn, Insyn, Erate, Irate, bErate=0, bIrate=5):
     # Ensyn and Insyn are lists - but may contain only one element
     Ensyn = sum(Ensyn)
     Insyn = sum(Insyn)
-    print Ensyn, Erate, data.st_duration * 1000, data.st_onset * 1000
+    print(Ensyn, Erate, data.st_duration * 1000, data.st_onset * 1000)
     data.etimes = genPoissonPulse(Ensyn, Erate, data.st_duration * 1000, data.st_onset * 1000)
 #        print(data.etimes.shape[0])
     if (bErate>0):
@@ -404,8 +407,8 @@ def sim_balanceInput(Ensyn, Insyn, fgErate, fgIrate, bgErate, bgIrate, duration,
     eitimes = genPoissonTrain(Ensyn_sig, bgErate, fgErate, duration, omega[0], omega[1], Insyn, bgIr, fgIr, rand_seed)
     etimes = eitimes[0]
     itimes = eitimes[1]
-    print 'number of dendrites stimulated: ', nden
-    print len(etimes[:,0]), 'E spikes generated for dendrite 1'
+    print('number of dendrites stimulated: ', nden)
+    print(len(etimes[:,0]), 'E spikes generated for dendrite 1')
     if (nden>1):
         for iden in np.arange(1,nden):
             Ensyn_sig = [Ensyn[iden]]
@@ -415,7 +418,7 @@ def sim_balanceInput(Ensyn, Insyn, fgErate, fgIrate, bgErate, bgIrate, duration,
             betimes[:,0] = betimes[:,0] + sum(Ensyn[0:iden])
             etimes = addBground(betimes, etimes)
             itimes = addBground(bitimes, itimes)
-            print len(betimes[:,0]), 'E spikes generated for dendrite', iden + 1
+            print(len(betimes[:,0]), 'E spikes generated for dendrite', iden + 1)
     data.etimes = etimes
     data.itimes = itimes
 
@@ -439,8 +442,8 @@ def sim_oriInput(Ensyn, Insyn, fgErate, fgIrate, bgErate, bgIrate, duration, ori
     eitimes = readPoissonTrain(duration, ir, ori, Ensyn, bgErate, fgErate, Insyn, bgIrate, fgIrate)
     etimes = eitimes[0]
     itimes = eitimes[1]
-    print 'all of the dendrites are stimulated'
-    print len(etimes[:,0]), 'E and ',  len(itimes[:,0]),  'I spikes read from file'
+    print('all of the dendrites are stimulated')
+    print(len(etimes[:,0]), 'E and ',  len(itimes[:,0]),  'I spikes read from file')
     data.etimes = etimes
     data.itimes = itimes
  
@@ -463,8 +466,8 @@ def sim_mixedoriInput(Ensyn, Insyn, fgErate, fgIrate, bgErate, bgIrate, duration
     eitimes = readOriTrain(data.TSTOP, data.ind_Rates, rep, Ensyn, bgErate, fgErate, Insyn, bgIrate, fgIrate)
     etimes = eitimes[0]
     itimes = eitimes[1]
-    print 'all of the dendrites are stimulated'
-    print len(etimes[:,0]), 'E and ',  len(itimes[:,0]),  'I spikes read from file'
+    print('all of the dendrites are stimulated')
+    print(len(etimes[:,0]), 'E and ',  len(itimes[:,0]),  'I spikes read from file')
 
     if (data.inburstrate > 0):
         np.random.seed(random_seed)
@@ -490,7 +493,7 @@ def SIM_balanceIteration(EIrates):
     fgErate, fgIrate, bgErate, bgIrate = EIrates
     for iter in np.arange(data.nIter):
         r_seed = data.r_seed * 100 + 4 * iter
-        print 'Running E bg. rate', bgErate, 'I bg. rate', bgIrate, 'E rate', fgErate, 'I rate', fgIrate, 'iteration:', iter
+        print('Running E bg. rate', bgErate, 'I bg. rate', bgIrate, 'E rate', fgErate, 'I rate', fgIrate, 'iteration:', iter)
 
         # sim_balanceInput(Ensyn=data.Ensyn, Insyn=data.Insyn, 
         #                                               fgErate=fgErate, fgIrate=fgIrate,
@@ -506,7 +509,7 @@ def SIM_balanceIteration(EIrates):
 def SIM_rateIteration(ERate, IRate):
     nIter = len(ERate)
     for iter in np.arange(nIter):
-        print 'Running E rate', ERate[iter], 'iteration:', iter
+        print('Running E rate', ERate[iter], 'iteration:', iter)
         np.random.seed(data.r_seed * 100 + iter)
         data.taxis, v, vD, Et, It = sim_oneRandomInput(Ensyn=data.Ensyn, Insyn=data.Insyn, 
                                                         Erate=ERate[iter], Irate=IRate[iter],
@@ -519,7 +522,7 @@ def SIM_oriIteration(EIrates):
     fgErate, fgIrate, bgErate, bgIrate = EIrates
     for iter in np.arange(data.nIter):
         r_seed = data.r_seed * 100 + 4 * iter
-        print 'Running E bg. rate', bgErate, 'I bg. rate', bgIrate, 'E rate', fgErate, 'I rate', fgIrate, 'iteration:', iter
+        print('Running E bg. rate', bgErate, 'I bg. rate', bgIrate, 'E rate', fgErate, 'I rate', fgIrate, 'iteration:', iter)
 
         data.taxis, v, vD, Et, It = sim_oriInput(Ensyn=data.Ensyn, Insyn=data.Insyn, 
                                                       fgErate=fgErate, fgIrate=fgIrate,
@@ -533,7 +536,7 @@ def SIM_mixedoriIteration(EIrates):
     fgErate, fgIrate, bgErate, bgIrate = EIrates
     for iter in np.arange(data.nIter):
         r_seed = data.r_seed * 100 + 4 * iter
-        print 'Running E bg. rate', bgErate, 'I bg. rate', bgIrate, 'E rate', fgErate, 'I rate', fgIrate, 'iteration:', iter
+        print('Running E bg. rate', bgErate, 'I bg. rate', bgIrate, 'E rate', fgErate, 'I rate', fgIrate, 'iteration:', iter)
 
         data.taxis, v, vD, Et, It = sim_mixedoriInput(Ensyn=data.Ensyn, Insyn=data.Insyn, 
                                                       fgErate=fgErate, fgIrate=fgIrate,
@@ -548,7 +551,7 @@ def SIM_nsynIteration(tInterval, bGround=False):
 #   first each synapse is activated alone
     It = []
     for nsyn in np.arange(1, data.Ensyn[0]+1):
-        print 'activating synapse ', nsyn, ' alone'
+        print('activating synapse ', nsyn, ' alone')
         data.etimes = np.array([[nsyn-1, data.st_onset * 1000]])
         fih = lb.h.FInitializeHandler(1, initSpikes)
         taxis, v, vD = lb.simulate(model, t_stop=data.TSTOP * 1000,
@@ -560,7 +563,7 @@ def SIM_nsynIteration(tInterval, bGround=False):
 #   ---------------------------------------
 #   next, synapses are activated together
     for nsyn in np.arange(1, data.Ensyn[0]+1):
-        print 'activating ', nsyn, ' synapses together'
+        print('activating ', nsyn, ' synapses together')
         data.etimes = genDSinput(nsyn, tInterval, data.st_onset * 1000,'OUT')
         # if bGround:
         #     data.etimes = addBground(data.bEnsyn, data.Ensyn,
@@ -583,7 +586,7 @@ def SIM_burstIteration(burstRate, maxN):
     for iter in np.arange(data.nIter):
         r_seed = data.r_seed * 100 + 4 * iter
         np.random.seed(r_seed)
-        print 'Running E bg. rate', Erate, 'burst rate', burstRate, 'iteration:', iter
+        print('Running E bg. rate', Erate, 'burst rate', burstRate, 'iteration:', iter)
 
         # sim_balanceInput(Ensyn=data.Ensyn, Insyn=data.Insyn, 
         #                                               fgErate=fgErate, fgIrate=fgIrate,
@@ -605,7 +608,7 @@ def SIM_currentSteps(iRange, bGround=False):
                 data.itimes = genPoissonPulse(data.Insyn, data.IbGroundRate, data.TSTOP * 1000, 0)
                 It = data.itimes
                 fih = lb.h.FInitializeHandler(1, initSpikes)
-        print 'Running input step current', step
+        print('Running input step current', step)
         model.stim.amp = step
         taxis, v, vD = lb.simulate(model, t_stop=data.TSTOP * 1000, NMDA=data.NMDA, recDend=data.recordDend, i_recDend=data.locDendRec)
 
@@ -620,7 +623,7 @@ def SIM_minisDistribution(data):
     Enum = sum(data.Ensyn)
     for nsyn in np.arange(0, Enum):
     # for nsyn in np.arange(0, 10):
-        print 'activating excitatory synapse ', nsyn, ' alone'
+        print('activating excitatory synapse ', nsyn, ' alone')
         data.etimes = np.array([[nsyn, data.st_onset * 1000]])
         fih = lb.h.FInitializeHandler(1, initSpikes)
         taxis, v, vD = lb.simulate(model, t_stop=data.TSTOP * 1000,
@@ -634,7 +637,7 @@ def SIM_minisDistribution(data):
     It, Et, data.etimes, data.itimes = [], [], [], []
     Inum = sum(data.Insyn)
     for nsyn in np.arange(0, Inum):
-        print 'activating inhibitory synapse ', nsyn, ' alone'
+        print('activating inhibitory synapse ', nsyn, ' alone')
         data.itimes = np.array([[nsyn, data.st_onset * 1000]])
         fih = lb.h.FInitializeHandler(1, initSpikes)
         taxis, v, vD = lb.simulate(model, t_stop=data.TSTOP * 1000,
