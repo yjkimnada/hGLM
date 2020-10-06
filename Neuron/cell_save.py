@@ -14,7 +14,7 @@ def save_syn(data, outdir='data', clust='0'):
     mat = np.expand_dims(mat, axis=1)
 
 
-    bfname = './'+outdir+'/Syn_'+filename+'.bin'
+    bfname = '/Users/yjkimnada/hGLM/Neuron/'+outdir+'/Syn_'+filename+'.bin'
     print(bfname)
     # create a binary file
     binfile = file(bfname, 'wb')
@@ -66,7 +66,7 @@ def save_sim(data, out_binary=False, out_vdend=False, out_pickle=False, outdir='
 
     if out_pickle:
         dataList = [data, modelData]
-        fname = './'+outdir+'/'+filename+'.pkl'
+        fname = '/Users/yjkimnada/hGLM/Neuron/'+outdir+'/'+filename+'.pkl'
         f = open(fname, 'wb')
         pickle.dump(dataList, f)
         f.close()
@@ -97,7 +97,7 @@ def save_sim(data, out_binary=False, out_vdend=False, out_pickle=False, outdir='
             for i in range(1, nRep):
                 mat = np.hstack((mat, data.vDdata[i]))
             
-            bfname = './'+outdir+'/vDdata_'+filename+'.bin'
+            bfname = '/Users/yjkimnada/hGLM/Neuron/'+outdir+'/vDdata_'+filename+'.bin'
             # create a binary file
             binfile = open(bfname, 'wb')
             # and write out two integers with the row and column dimension
@@ -121,7 +121,7 @@ def save_sim(data, out_binary=False, out_vdend=False, out_pickle=False, outdir='
             else :
                 Locs = np.array(data.Elocs)
 
-            bfname = './'+outdir+'/synlocs_'+filename+'.bin'
+            bfname = '/Users/yjkimnada/hGLM/Neuron/'+outdir+'/synlocs_'+filename+'.bin'
             # create a binary file
             binfile = open(bfname, 'wb')
             # and write out two integers with the row and column dimension
@@ -137,7 +137,7 @@ def save_sim(data, out_binary=False, out_vdend=False, out_pickle=False, outdir='
         # Write the input spike train
         if (len(data.stim)>0):
             stim = data.stim
-            bfname = './'+outdir+'/stim_'+filename+'.bin'
+            bfname = '/Users/yjkimnada/hGLM/Neuron/'+outdir+'/stim_'+filename+'.bin'
             # create a binary file
             binfile = open(bfname, 'wb')
             # and write out two integers with the row and column dimension
