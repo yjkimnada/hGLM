@@ -132,6 +132,7 @@ def save_sim(data, out_binary=False, out_vdend=False, out_pickle=False, outdir='
                 ddata = struct.pack('%id' % Locs.shape[0], *Locs[:,i])
                 binfile.write(ddata)
             binfile.close()
+            np.save('/Users/yjkimnada/hGLM/Neuron/'+outdir+'/synlocs_'+filename+'.npy', Locs)
 
         #---------------------------------------------
         # Write the input spike train
