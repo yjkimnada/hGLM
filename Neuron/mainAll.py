@@ -91,7 +91,7 @@ exec(open("hGLM/Neuron/init_params.py").read())
 
 #----------------------------------------------------------------------------
 # Simulation general parameters
-data.dt = 0.2
+data.dt = 1
 lb.h.dt = data.dt
 lb.h.steps_per_ms = 1.0/lb.h.dt
 data.recordDend = True
