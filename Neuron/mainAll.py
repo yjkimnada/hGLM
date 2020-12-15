@@ -3,7 +3,7 @@ import struct
 import matplotlib.pyplot as plt
 import time
 
-import brian2 as br
+import brian as br
 
 import libcell as lb
 import saveClass as sc
@@ -11,7 +11,7 @@ import saveClass as sc
 # this does not creates a new module, just executes the content of the file
 # as if it was written in the same file!
 #execfile('sim_functs.py') 
-exec(open("hGLM/Neuron/sim_functs.py").read())
+exec(open("hglm/neuron/sim_functs.py").read())
 
 #----------------------------------------------------------------------------
 # Data saving object; # Data storage lists
@@ -42,33 +42,33 @@ data.inburstrate = 0
 
 #---------------------------------------------------------------------------
 # simtype sets the location of the synapses and the stimulus type
-data.SHOWTRACES = True
+data.SHOWTRACES = False
 data.SAVE = True
-data.SHOWSYNS = True
+data.SHOWSYNS = False
 
 ### number of iterations for allDend; number of orientations for ori
 data.nIter = 1 # 10 for allDend; 16 for ori and 10 for mixedori
 ### time parameters
 data.st_onset = 0.11 # in seconds - only for minis
 data.st_duration = 2.5 # doesn't matter
-data.TSTOP = 48 # 41 for allDend, 18 for orientations and 48 for mixedori, 0.3 for minis
+data.TSTOP = 80 # 41 for allDend, 18 for orientations and 48 for mixedori, 0.3 for minis
 
-data.ACTIVE = True
-data.ACTIVEaxonSoma = True
-data.ACTIVEdend = False
-data.ACTIVEdendNa = False
-data.ACTIVEdendCa = False
-data.ACTIVEhotSpot = False
+#data.ACTIVE = True
+#data.ACTIVEaxonSoma = True
+#data.ACTIVEdend = False
+#data.ACTIVEdendNa = False
+#data.ACTIVEdendCa = False
+#data.ACTIVEhotSpot = False
 if (data.actType == 'passive'):
    data.ACTIVE = False
    data.ACTIVEaxonSoma = False
 if (data.actType == 'Adend'):
+    data.ACTIVE = True
     data.ACTIVEdend = True
-    data.ACTIVEdendNa = True
+    data.ACTIVEdendNa = False
     data.ACTIVEdendCa = True
-    data.ACTIVEhotSpot = True
+    data.ACTIVEhotSpot = False
     data.ACTIVEaxonSoma = False
-
 
 data.SPINES = False
 
@@ -87,7 +87,7 @@ data.Irev = -80
 data.locBias = 'none'
 
 #execfile('init_params.py')
-exec(open("hGLM/Neuron/init_params.py").read())
+exec(open("hglm/neuron/init_params.py").read())
 
 #----------------------------------------------------------------------------
 # Simulation general parameters
@@ -115,7 +115,6 @@ if (data.ICLAMP):
     if data.iclampLoc[0]=='dend':
         lb.add_dendStim(model, data.iclampLoc[1], data.iclampLoc[2],
                  onset=data.iclampOnset, dur=data.iclampDur, amp=data.iclampAmp)
-
 
 #----------------------------------------------------------------------------
 # Generate synapse locations

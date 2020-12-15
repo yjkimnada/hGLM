@@ -5,6 +5,7 @@
 # m.alpha is the probability of going into the up state depending on the stimulus orientation (and phase...)
 #m.alphas <- c(12.40,  7.40,  3.76,  2.73,  4.47,  8.66, 13.53, 15.39, 12.40,  7.40,  3.76, 2.73,  4.47,  8.66, 13.53, 15.39)# - a sinusoid fit
 # m.alphas <- c(12.64,  6.60,  2.65,  0.49, 12.64, 12.64, 15.87, 22.42, 22.42, 10.72,  1.00,  0.00,  2.08,  2.08,  4.51,  8.96) # - median of data
+source('/Users/yjkimnada/hGLM/inputs/Funts_dendr_orisel.R', chdir = TRUE)
 
 m.alphas <- c(10.54,  4.96,  1.07,  0.5,  1.82,  6.33, 11.84, 14.01, 10.54,  4.96,  1.07,  0.5,  1.82,  6.33, 11.84, 14.01)
 beta <- 20
@@ -13,8 +14,8 @@ beta <- 20
 ### we first generate a Poisson train with rate_max = 10 Hz.
 ### the we remove all transitions with the probability of the ratio of the true rate and rate_max
 
-source('/Users/yjkimnada/hGLM/inputs/Funts_dendr_orisel.R', chdir = TRUE)
-Tmax <- 3000 # set to 3000; 125
+
+Tmax <- 5000# set to 3000; 125
 set.seed(317)
 ori.dends <- floor(rnorm(16, 0, 1.5) %% 16)
 print(ori.dends)
@@ -22,9 +23,10 @@ print(ori.dends)
 Ensyn <- c(48,58, 52,34,45,39,44, 68,50,62,30, 60,39)
 Insyn <- c(11,11, 9,6,8,5,8, 12,11,13,6, 11,8); N.inh <- sum(Insyn)
 
+#Erate <- c(5,20); Esd <- c(2.5, 10)
 Erate <- c(5, 20); Esd <- c(2.5, 10)
-Irate <- c(20, 30)
-ind.rate <- 1
+Irate <- c(20,30)
+ind.rate <- 0
 N.soma <- 420
 
 rep <- 1; ori <- 14; i.den <- 1
@@ -32,8 +34,8 @@ rep <- 1; ori <- 14; i.den <- 1
 saveinput <- T
 showinput <- T
 
-for (rep in 1:2){
-  
+for (rep in 1:1){
+print(cat("REPETITION" , rep))
   # rate.inh <- rep(0, Tmax)	# inhibitory rate
   
   for (ori in 1:16){ # 16 stimulus orientation
@@ -82,10 +84,10 @@ for (rep in 1:2){
   }
   
   if (saveinput){ 	
-    fname <- paste("/users/yjkimnada/hGLM/inputs/Espikes_d", Tmax*16, '_r', ind.rate, '_rep', rep, '_Ne', sum(Ensyn), '_e', Erate[1], '_E', Erate[2], '.dat', sep="")
+    fname <- paste("/users/yjkimnada/hGLM/inputs/Espikes_d", Tmax*16, '_r', ind.rate+1, '_rep', rep, '_Ne', sum(Ensyn), '_e', Erate[1], '_E', Erate[2], '.dat', sep="")
     write.table(Espikes, file=fname, row.names=FALSE, col.names=FALSE)
     
-    fname <- paste("/users/yjkimnada/hGLM/inputs/Ispikes_d", Tmax*16, '_r', ind.rate,'_rep', rep, '_Ni', sum(Insyn)+1, '_i', Irate[1], '_I', Irate[2], '.dat', sep="")
+    fname <- paste("/users/yjkimnada/hGLM/inputs/Ispikes_d", Tmax*16, '_r', ind.rate+1,'_rep', rep, '_Ni', sum(Insyn)+1, '_i', Irate[1], '_I', Irate[2], '.dat', sep="")
     write.table(Ispikes, file=fname, row.names=FALSE, col.names=FALSE)
   }
 }

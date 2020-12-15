@@ -76,19 +76,20 @@ def save_sim(data, out_binary=False, out_vdend=False, out_pickle=False, outdir='
         #---------------------------------------------
         # WRITE the response in a binary file to read it with R
         mat = np.array(data.vdata)
-        bfname = outdir+'/vdata_'+filename+'.bin'
+        bfname = outdir+'/vdata_'+filename+'.npy'
         bfname = os.path.join("/Users/yjkimnada/hGLM/Neuron/", bfname)
         print(bfname)
+        np.save(bfname, mat)
         # create a binary file
-        binfile = open(bfname, 'wb')
+        #binfile = open(bfname, 'wb')
         # and write out two integers with the row and column dimension
-        header = struct.pack('2I', mat.shape[0], mat.shape[1])
-        binfile.write(header)
+        #header = struct.pack('2I', mat.shape[0], mat.shape[1])
+        #binfile.write(header)
         # then loop over columns and write each
-        for i in range(mat.shape[1]):
-            ddata = struct.pack('%id' % mat.shape[0], *mat[:,i])
-            binfile.write(ddata)
-        binfile.close()
+        #for i in range(mat.shape[1]):
+            #ddata = struct.pack('%id' % mat.shape[0], *mat[:,i])
+            #binfile.write(ddata)
+        #binfile.close()
 
         if out_vdend:
             # WRITE the dendritic response
@@ -97,17 +98,18 @@ def save_sim(data, out_binary=False, out_vdend=False, out_pickle=False, outdir='
             for i in range(1, nRep):
                 mat = np.hstack((mat, data.vDdata[i]))
             
-            bfname = '/Users/yjkimnada/hGLM/Neuron/'+outdir+'/vDdata_'+filename+'.bin'
+            bfname = '/Users/yjkimnada/hGLM/Neuron/'+outdir+'/vDdata_'+filename+'.npy'
+            np.save(bfname, mat)
             # create a binary file
-            binfile = open(bfname, 'wb')
+            #binfile = open(bfname, 'wb')
             # and write out two integers with the row and column dimension
-            header = struct.pack('2I', mat.shape[0], mat.shape[1])
-            binfile.write(header)
+            #header = struct.pack('2I', mat.shape[0], mat.shape[1])
+            #binfile.write(header)
             # then loop over columns and write each
-            for i in range(mat.shape[1]):
-                ddata = struct.pack('%id' % mat.shape[0], *mat[:,i])
-                binfile.write(ddata)
-            binfile.close()
+            #for i in range(mat.shape[1]):
+                #ddata = struct.pack('%id' % mat.shape[0], *mat[:,i])
+                #binfile.write(ddata)
+            #binfile.close()
         
 
         #---------------------------------------------
@@ -121,31 +123,32 @@ def save_sim(data, out_binary=False, out_vdend=False, out_pickle=False, outdir='
             else :
                 Locs = np.array(data.Elocs)
 
-            bfname = '/Users/yjkimnada/hGLM/Neuron/'+outdir+'/synlocs_'+filename+'.bin'
+            #bfname = '/Users/yjkimnada/hGLM/Neuron/'+outdir+'/synlocs_'+filename
             # create a binary file
-            binfile = open(bfname, 'wb')
+            #binfile = open(bfname, 'wb')
             # and write out two integers with the row and column dimension
-            header = struct.pack('2I', Locs.shape[0], Locs.shape[1])
-            binfile.write(header)
+            #header = struct.pack('2I', Locs.shape[0], Locs.shape[1])
+            #binfile.write(header)
             # then loop over columns and write each
-            for i in range(Locs.shape[1]):
-                ddata = struct.pack('%id' % Locs.shape[0], *Locs[:,i])
-                binfile.write(ddata)
-            binfile.close()
+            #for i in range(Locs.shape[1]):
+                #ddata = struct.pack('%id' % Locs.shape[0], *Locs[:,i])
+                #binfile.write(ddata)
+            #binfile.close()
             np.save('/Users/yjkimnada/hGLM/Neuron/'+outdir+'/synlocs_'+filename+'.npy', Locs)
 
         #---------------------------------------------
         # Write the input spike train
         if (len(data.stim)>0):
             stim = data.stim
-            bfname = '/Users/yjkimnada/hGLM/Neuron/'+outdir+'/stim_'+filename+'.bin'
+            bfname = '/Users/yjkimnada/hGLM/Neuron/'+outdir+'/stim_'+filename+'.npy'
+            np.save(bfname, stim)
             # create a binary file
-            binfile = open(bfname, 'wb')
+            #binfile = open(bfname, 'wb')
             # and write out two integers with the row and column dimension
-            header = struct.pack('2I', stim.shape[0], stim.shape[1])
-            binfile.write(header)
+            #header = struct.pack('2I', stim.shape[0], stim.shape[1])
+            #binfile.write(header)
             # then loop over columns and write each
-            for i in range(stim.shape[1]):
-                ddata = struct.pack('%id' % stim.shape[0], *stim[:,i])
-                binfile.write(ddata)
-            binfile.close()
+            #for i in range(stim.shape[1]):
+                #ddata = struct.pack('%id' % stim.shape[0], *stim[:,i])
+                #binfile.write(ddata)
+            #binfile.close()

@@ -3,6 +3,8 @@
 import struct
 import sys
 from numpy import loadtxt
+from numpy.random import exponential, randint
+from numpy import ones, cumsum, sum, isscalar
 
 def initOnsetSpikes():
     model.ncAMPAlist[0].event(data.st_onset * 1000)
@@ -157,12 +159,27 @@ def readDendLocs(data):
 # Input generation functions
 #-----------------------------------------------
 
+class OfflinePoissonGroup(object): # This is weird, there is only an init method
+    def __init__(self, N, rates, T):
+        """
+        Generates a Poisson group with N spike trains and given rates over the
+        time window [0,T].
+        """
+        if isscalar(rates):
+            rates = rates * ones(N)
+        totalrate = sum(rates)
+        isi = exponential(1 / totalrate, int(T * totalrate * 2))
+        spikes = cumsum(isi)
+        spikes = spikes[spikes <= T]
+        neurons = randint(0, N, len(spikes))
+        self.spiketimes = zip(neurons, spikes)
+
 def genPoissonPulse(nsyn, rate, duration, onset):
     times = np.array([])
     print('Poisson train for', nsyn, 'cells with', rate, 'Hz rate and', duration,'ms duration')
     while times.shape[0]<2: # at least two spikes are required
-        P =  br.OfflinePoissonGroup(nsyn, rate, duration * br.ms)
-        times = np.array(P.spiketimes)    
+        P =  OfflinePoissonGroup(nsyn, rate, duration * br.ms )
+        times = np.array(P.spiketimes)
     times[:,1] = times[:,1] * 1000 + onset
     return times
 
@@ -233,15 +250,14 @@ def readOriTrain(duration, ir, rep, Ensyn, bgErate, fgErate, Insyn, bgIrate, fgI
     duration = duration*1000
     
     fname = 'hGLM/Neuron/allDend/mixedori/Espikes_d'+str(duration)+'_r'+str(ir+1)+'_rep'+str(rep+1)+'_Ne'+str(Ensyn)+'_e'+str(bgErate)+'_E'+str(fgErate)+'.dat'
-    print(fname)
-    Etimes = loadtxt(fname, comments="#", delimiter=" ", unpack=False)    
+    Etimes = np.loadtxt(fname, comments="#", delimiter=" ", unpack=False)    
     n_sp = len(Etimes)
 
     
     if (Insyn > 0) :
         Itimes = np.array([])
         fname = 'hGLM/Neuron/allDend/mixedori/Ispikes_d'+str(duration)+'_r'+str(ir+1)+'_rep'+str(rep+1)+'_Ni'+str(Insyn)+'_i'+str(bgIrate)+'_I'+str(fgIrate)+'.dat'
-        Itimes = loadtxt(fname, comments="#", delimiter=" ", unpack=False)    
+        Itimes = np.loadtxt(fname, comments="#", delimiter=" ", unpack=False)    
         times = [Etimes, Itimes]
     else :
         times = Etimes

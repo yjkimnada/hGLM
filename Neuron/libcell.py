@@ -280,7 +280,6 @@ def add_GABAsyns(model, locs=[[0, 0.5]], gmax=0.5, tau1=0.1, tau2=4,
         model.GABAlist.append(GABA)
         model.ncGABAlist.append(NC)
     print('inhibitory synapses generated')
-        
 
 def addSpines(model):
     for sec in model.dends:
@@ -299,7 +298,6 @@ def hotSpot(model):
             else:
                 seg.gbar_na = 0
             s+=1
-
 
 # ----------------------------------------------------------
 # SIMULATION RUN
